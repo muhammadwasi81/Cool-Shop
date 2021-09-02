@@ -31,9 +31,6 @@ export const theme = createMuiTheme({
     background: {
       default: '#ffffff',
     },
-    purple: {
-      main: '#3f50b5',
-    }
   },
 });
 

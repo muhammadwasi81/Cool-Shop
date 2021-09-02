@@ -35,7 +35,7 @@ export default function Layout({
         <CssBaseline />
         <AppBar
           position="static"
-          color="primary"
+          color="main"
           elevation={0}
           className={classes.appBar}
         >
