@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import Layout from '../components/Layout';
 import getCommerce from '../utils/commerce';
 
 export default function Home(props) {
   const { products } = props
   return (
-    <div>
 
+    <Layout title="Home" commercePublicKey={props.commercePublicKey}>
       <main className="styles.main">
         {products.map((product) => (
           <div key={product.id}>
@@ -15,7 +16,9 @@ export default function Home(props) {
           </div>
         ))}
       </main>
-    </div>
+    </Layout>
+
+
   )
 }
 
