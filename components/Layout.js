@@ -1,30 +1,50 @@
+import React, { useContext, useEffect } from 'react';
 import {
   ThemeProvider,
   CssBaseline,
-  Toolbar,
   AppBar,
+  Toolbar,
   Link,
   Container,
-  Typography,
   Box,
+  Typography,
+  CircularProgress,
+  Badge,
 } from '@material-ui/core';
-import React from 'react';
 import { theme, useStyles } from '../utils/styles';
 import Head from 'next/head';
 import NextLink from 'next/link';
+import {
+  CART_RETRIEVE_REQUEST,
+  CART_RETRIEVE_SUCCESS,
+} from '../utils/constants';
+import { Store } from './Store';
+import getCommerce from '../utils/commerce';
 
 export default function Layout({
   children,
   commercePublicKey,
-  title = 'CoolShop',
+  title = 'Coolshop',
 }) {
   const classes = useStyles();
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const commerce = getCommerce(commercePublicKey);
+      dispatch({ type: CART_RETRIEVE_REQUEST });
+      const cartData = await commerce.cart.retrieve();
+      dispatch({ type: CART_RETRIEVE_SUCCESS, payload: cartData });
+    };
+    fetchCart();
+  }, []);
 
   return (
     <React.Fragment>
       <Head>
         <meta charSet="utf-8" />
-        <title>{`${title} - CoolShop`}</title>
+        <title>{`${title} - Coolshop`}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="viewport"
@@ -35,7 +55,7 @@ export default function Layout({
         <CssBaseline />
         <AppBar
           position="static"
-          color="main"
+          color="default"
           elevation={0}
           className={classes.appBar}
         >
@@ -48,10 +68,9 @@ export default function Layout({
                 href="/"
                 className={classes.toolbarTitle}
               >
-                CoolShop
+                Coolshop
               </Link>
             </NextLink>
-
             <nav>
               <NextLink href="/cart">
                 <Link
@@ -60,22 +79,28 @@ export default function Layout({
                   href="/cart"
                   className={classes.link}
                 >
-                  Cart
+                  {cart.loading ? (
+                    <CircularProgress />
+                  ) : cart.data.total_items > 0 ? (
+                    <Badge badgeContent={cart.data.total_items} color="primary">
+                      Cart
+                    </Badge>
+                  ) : (
+                    'Cart'
+                  )}
                 </Link>
               </NextLink>
             </nav>
           </Toolbar>
         </AppBar>
-
         <Container component="main" className={classes.main}>
           {children}
         </Container>
-
         <Container maxWidth="md" component="footer">
           <Box mt={5}>
             <Typography variant="body2" color="textSecondary" align="center">
-              &copy;
-              {' CoolShop '} 2021
+              {' © '}
+              Coolshop 2021
               {'.'}
             </Typography>
           </Box>
@@ -84,5 +109,3 @@ export default function Layout({
     </React.Fragment>
   );
 }
-
-// 42 minute pr tha..
