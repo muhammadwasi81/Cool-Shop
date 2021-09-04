@@ -1,34 +1,35 @@
-import Link from 'next/link';
+import React, { useContext, useState } from 'react';
+import { Alert } from '@material-ui/lab';
+import getCommerce from '../../utils/commerce';
+
 import {
   Box,
+  Button,
   Card,
+  Grid,
   List,
   ListItem,
-  Select,
   MenuItem,
-  Button,
-  Grid,
+  Select,
   Slide,
   Typography,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import Layout from '../../components/Layout';
-import getCommerce from '../../utils/commerce';
-import { useContext, useState } from 'react';
+
 import { useStyles } from '../../utils/styles';
+
+import Layout from '../../components/Layout';
 import { Store } from '../../components/Store';
-import { CART_RETRIEVE_SUCCESS } from '../../utils/constants';
 import Router from 'next/router';
+import { CART_RETRIEVE_SUCCESS } from '../../utils/constants';
 
-export default function Product(props) {
-  const { product } = props;
-  const [quantity, setQuantity] = useState(1);
-
+export default function Home(props) {
   const classes = useStyles();
 
   const { state, dispatch } = useContext(Store);
-  const { cart } = state;
+  const { userInfo, cart } = state;
 
+  const [quantity, setQuantity] = useState(1);
+  const { product } = props;
   const addToCartHandler = async () => {
     const commerce = getCommerce(props.commercePublicKey);
     const lineItem = cart.data.line_items.find(
@@ -48,9 +49,13 @@ export default function Product(props) {
   };
 
   return (
-    <Layout title={product.name} commercePublicKey={props.commercePublicKey}>
-      <Slide direction="up" in={true}>
-        <Grid container spacing={3}>
+    <Layout
+      userInfo={userInfo}
+      title={product.name}
+      commercePublicKey={props.commercePublicKey}
+    >
+      <Slide key={product.name} direction="up" in={true}>
+        <Grid container spacing={1}>
           <Grid item md={6}>
             <img
               src={product.media.source}
@@ -90,6 +95,7 @@ export default function Product(props) {
                     </Grid>
                   </Grid>
                 </ListItem>
+
                 <ListItem>
                   <Grid alignItems="center" container>
                     <Grid item xs={6}>
@@ -117,8 +123,8 @@ export default function Product(props) {
                         </Grid>
                         <Grid item xs={6}>
                           <Select
-                            labelId="quanitity-label"
-                            id="quanitity"
+                            labelId="quantity-label"
+                            id="quantity"
                             fullWidth
                             onChange={(e) => setQuantity(e.target.value)}
                             value={quantity}

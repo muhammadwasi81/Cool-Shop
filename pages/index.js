@@ -4,14 +4,13 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
-  Fade,
   Grid,
   Link,
   Slide,
   Typography,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import React, { Component } from 'react';
+import React from 'react';
 import Layout from '../components/Layout';
 import getCommerce from '../utils/commerce';
 

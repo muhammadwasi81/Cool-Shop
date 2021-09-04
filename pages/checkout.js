@@ -551,3 +551,4 @@ function Checkout(props) {
 export default dynamic(() => Promise.resolve(Checkout), {
   ssr: false,
 });
+id

@@ -1,7 +1,6 @@
 import Commerce from '@chec/commerce.js';
 
 let commerce = null;
-
 function getCommerce(commercePublicKey) {
   if (commerce) {
     return commerce;
